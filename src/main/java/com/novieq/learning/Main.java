@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -15,6 +16,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+
 
 public class Main {
     public static void main(String args[]) {
@@ -27,20 +30,9 @@ public class Main {
             HttpEntity entity = response.getEntity();
             if (entity != null) {
                 instream = entity.getContent();
-                InputStreamReader is = new InputStreamReader(instream);
-                StringBuilder sb=new StringBuilder();
-                BufferedReader br = new BufferedReader(is);
-                String read = br.readLine();
-
-                while(read != null) {
-                    //System.out.println(read);
-                    sb.append(read);
-                    read =br.readLine();
-                }
-
-                System.out.println(sb.toString());
-                
-                Document document = Jsoup.parse(sb.toString());
+                String input = IOUtils.toString(instream);
+                             
+                Document document = Jsoup.parse(input.toString());
                 Elements els =  document.select("tbody > tr > td");
                 Elements links = document.select("link[href]");
                 Elements media = document.select("[src]");
